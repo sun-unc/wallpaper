@@ -1,1 +1,1 @@
-<view class="home-layout"> 蓝胖子壁纸 </view>
+<view class="home-layout data-v-1cf27b2a"><view class="banner data-v-1cf27b2a"><swiper class="data-v-1cf27b2a" indicator-dots autoplay="{{true}}" circular indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff"><swiper-item wx:for="{{a}}" wx:for-item="item" wx:key="a" class="data-v-1cf27b2a"><image class="data-v-1cf27b2a" src="{{b}}" mode=""></image><image class="data-v-1cf27b2a" src="{{c}}" mode=""></image><image class="data-v-1cf27b2a" src="{{d}}" mode=""></image></swiper-item></swiper></view></view>
