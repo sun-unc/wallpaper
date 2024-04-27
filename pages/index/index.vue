@@ -29,6 +29,32 @@
 				<uni-icons type="right" size="16" color="#333"></uni-icons>
 			</view>
 		</view>
+		<view class="select">
+			<CommonTitle title="每日推荐">
+				<template #custom>
+					<view class="date">
+						<uni-icons type="calendar" size="18" color="#28b389"></uni-icons>
+						<view class="text">
+							<uni-dateformat :date="Date.now()" format="dd日"></uni-dateformat>							
+						</view>						
+					</view>
+				</template>
+			</CommonTitle>
+			<view class="content">
+				<scroll-view scroll-x>
+					<view class="box" v-for="item in 8">
+						<image src="../../common/images/preview_small.webp" mode="aspectFill"></image>
+					</view>
+				</scroll-view>
+			</view>
+		</view>
+		<view class="theme">
+			<CommonTitle title="专题精选">
+				<template #custom>
+					<navigator class="more">More+</navigator>
+				</template>
+			</CommonTitle>
+		</view>
 	</view>
 </template>
 
@@ -36,7 +62,7 @@
 	.home-layout {
 		.banner {
 			width: 100%;
-			padding: 30rpx 0;
+			padding: 30rpx;
 			swiper {
 				width: 100%;
 				height: 340rpx;
@@ -56,7 +82,7 @@
 			height: 80rpx;
 			background-color: #f9f9f9;
 			border-radius: 80rpx;
-			margin: 0 auto;
+			margin: 0 30rpx;
 			.left {
 				width: 140rpx;
 				display: flex;
@@ -90,6 +116,45 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
+			}
+		}
+		.select {
+			margin-top: 50rpx;
+			padding-left: 30rpx;
+			.content {
+				margin-top: 30rpx;
+				width: 100%;
+				scroll-view {
+					white-space: nowrap;
+					.box {
+						display: inline-block;
+						margin-right: 15rpx;
+						image {
+							width: 25vw;
+							height: 25vh;
+							border-radius: 10rpx;
+						}
+						&:last-child {
+							margin-right: 30rpx;
+						}
+					}
+				}
+			}
+			.date {
+				display: flex;
+				align-items: center;
+				color: #28b398;
+				.text {
+					margin-left: 5rpx;
+				}
+			}
+		}
+		.theme {
+			margin-top: 50rpx;
+			padding-left: 30rpx;
+			.more  {
+				font-size: 32rpx;
+				color: #888;
 			}
 		}
 	}
