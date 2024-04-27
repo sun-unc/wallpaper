@@ -1,1 +1,9 @@
-/unpackage/*
+# Mac
+.DS_Store
+**/.DS_Store
+
+# JavaScript
+node_modules/
+
+# uni-app
+unpackage/
