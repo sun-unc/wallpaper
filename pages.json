@@ -26,9 +26,9 @@
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "#fff",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "蓝胖子壁纸",
-		"navigationBarBackgroundColor": "rgba(30, 116, 240, 1)",
+		"navigationBarBackgroundColor": "#1E74F0",
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
