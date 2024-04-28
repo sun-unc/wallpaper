@@ -8,8 +8,6 @@
 			<swiper indicator-dots :autoplay="true" circular indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" >
 				<swiper-item v-for="(item, index) in 3" :key="index">
 					<image src="/common/images/banner1.jpg" mode=""></image>
-					<image src="/common/images/banner2.jpg" mode=""></image>
-					<image src="/common/images/banner3.jpg" mode=""></image>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -54,6 +52,11 @@
 					<navigator class="more">More+</navigator>
 				</template>
 			</CommonTitle>
+			
+			<view class="content">
+				<ThemeItem v-for="item in 8"></ThemeItem>
+				<ThemeItem :isMore="true"></ThemeItem>
+			</view>
 		</view>
 	</view>
 </template>
@@ -150,11 +153,18 @@
 			}
 		}
 		.theme {
-			margin-top: 50rpx;
+			padding: 50rpx 0;
 			padding-left: 30rpx;
 			.more  {
 				font-size: 32rpx;
 				color: #888;
+			}
+			.content {
+				margin-top: 30rpx;
+				padding-right: 30rpx;
+				display: grid;
+				gap: 15rpx;
+				grid-template-columns: repeat(3, 1fr);
 			}
 		}
 	}
