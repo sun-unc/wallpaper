@@ -48,7 +48,7 @@
 		<view class="list">
 			<view class="row" v-for="(item, index) in sectionInfo" :key="index">
 				<view class="left">
-					<uni-icons :type="item.icon" size="20" color="#1E74F0"></uni-icons>
+					<uni-icons :type="item.icon" size="20"></uni-icons>
 					<div class="text">{{item.text}}</div>
 				</view>
 				<view class="right">
@@ -62,7 +62,7 @@
 		<view class="list">
 			<view class="row" v-for="(item, index) in sectionHelp" :key="index">
 				<view class="left">
-					<uni-icons :type="item.icon" size="20" color="#1E74F0"></uni-icons>
+					<uni-icons :type="item.icon" size="20"></uni-icons>
 					<div class="text">{{item.text}}</div>
 				</view>
 				<view class="right">
@@ -130,9 +130,16 @@
 						.left,.right {
 							display: flex;
 							align-items: center;
-							&.left > .text {
-								padding-left: 20rpx;
-								color: #666;
+							&.left{
+								:deep() {
+									.uni-icons {
+										color: $brand-theme-color !important;
+									}
+								}
+								 .text {
+									padding-left: 20rpx;
+									color: #666;
+								}
 							}
 							&.right > .text {
 								font-size: 28rpx;

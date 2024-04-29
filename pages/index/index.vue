@@ -13,7 +13,7 @@
 		</view>
 		<view class="notice">
 			<view class="left">
-				<uni-icons type="sound-filled" size="20" color="#28b389"></uni-icons>
+				<uni-icons type="sound-filled" size="20"></uni-icons>
 				<text>公告</text>
 			</view>
 			<view class="center">
@@ -31,7 +31,7 @@
 			<CommonTitle title="每日推荐">
 				<template #custom>
 					<view class="date">
-						<uni-icons type="calendar" size="18" color="#28b389"></uni-icons>
+						<uni-icons type="calendar" size="18"></uni-icons>
 						<view class="text">
 							<uni-dateformat :date="Date.now()" format="dd日"></uni-dateformat>							
 						</view>						
@@ -92,9 +92,14 @@
 				justify-content: center;
 				align-items: center;
 				> text {
-					color: #28b398;
+					color: $brand-theme-color;
 					font-weight: 600;
 					font-size: 28rpx;
+				}
+				:deep() {
+					.uni-icons {
+						color: $brand-theme-color !important;
+					}
 				}
 			}
 			.center {
@@ -146,7 +151,12 @@
 			.date {
 				display: flex;
 				align-items: center;
-				color: #28b398;
+				color: $brand-theme-color;
+				:deep() {
+					.uni-icons {
+						color: $brand-theme-color !important;
+					}
+				}
 				.text {
 					margin-left: 5rpx;
 				}
