@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <view class="classfy-layout">
+  <view class="classfy-layout page-bg">
 	<view class="classfy" v-for="item in 15">
 		<ThemeItem ></ThemeItem>
 	</view>

@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <view class="user-layout">
+  <view class="user-layout page-bg">
 	<view class="user-info">
 		<view class="avatar">
 			<image src="../../static/logo.webp" mode="aspectFill"></image>
@@ -123,8 +123,9 @@
 						padding: 0 30rpx;
 						height: 100rpx;
 						border-bottom: 1px solid #eee;
+						background-color: #fff;
 						&:last-child {
-							
+							border-bottom: none;
 						}
 						.left,.right {
 							display: flex;
