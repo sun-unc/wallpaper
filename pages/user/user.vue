@@ -38,7 +38,7 @@
   <view class="user-layout page-bg">
 	<view class="user-info">
 		<view class="avatar">
-			<image src="../../static/logo.webp" mode="aspectFill"></image>
+			<image src="../../static/logo.webp" mode="aspectFill" :webp="true"></image>
 		</view>
 		<view class="user-name">
 			Looooo
@@ -104,16 +104,17 @@
 			}
 			.user-name {
 				font-size: 44rpx;
-				color: #333;
+				color: $text-font-color-1;
 				padding: 20rpx 0 5rpx;
 			}
 		}
 		.section {
 			width: 100%;
 			margin: 50rpx auto;
-			border: 1px solid #eee;
-			border-radius: 10rpx;
+			border: 1px solid $border-color-1;
+			border-radius: 12rpx;
 			box-shadow: 0 0 30rpx rgba(0,0,0,0.05);
+			overflow: hidden;
 			.list {
 				.row {
 						display: flex;
@@ -122,7 +123,7 @@
 						position: relative;
 						padding: 0 30rpx;
 						height: 100rpx;
-						border-bottom: 1px solid #eee;
+						border-bottom: 1px solid $border-color-1;
 						background-color: #fff;
 						&:last-child {
 							border-bottom: none;
@@ -138,12 +139,12 @@
 								}
 								 .text {
 									padding-left: 20rpx;
-									color: #666;
+									color: $text-font-color-2;
 								}
 							}
 							&.right > .text {
 								font-size: 28rpx;
-								color: #aaa;
+								color: $text-font-color-3;
 							}
 						}
 						.button {

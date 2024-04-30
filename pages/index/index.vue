@@ -41,7 +41,7 @@
 			<view class="content">
 				<scroll-view scroll-x>
 					<view class="box" v-for="item in 8">
-						<image src="../../common/images/preview_small.webp" mode="aspectFill"></image>
+						<image src="../../common/images/preview_small.webp" mode="aspectFill" webp="true"></image>
 					</view>
 				</scroll-view>
 			</view>
@@ -110,7 +110,7 @@
 						display: flex;
 						align-items: center;
 						font-size: 30rpx;
-						color: #666;
+						color: $text-font-color-2;
 						.swiper-item{
 							overflow: hidden;
 							white-space: nowrap;
@@ -167,7 +167,7 @@
 			padding-left: 30rpx;
 			.more  {
 				font-size: 32rpx;
-				color: #888;
+				color: $text-font-color-2;
 			}
 			.content {
 				margin-top: 30rpx;
