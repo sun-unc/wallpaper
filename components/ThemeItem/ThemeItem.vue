@@ -9,13 +9,13 @@ defineProps({
 
 <template>
 	<view class="theme-item">
-		<navigator url="" class="box" v-if="!isMore">
+		<navigator v-if="!isMore" url="/pages/classifyList/classifyList" class="box">
 			<image class="pic" src="../../common/images/preview1.jpg" mode="aspectFill"></image>
 			<view class="mask">图片标题</view>
 			<view class="tab">3天前更新</view>
 		</navigator>
 		
-		<navigator url="" class="box more" v-else>
+		<navigator v-else url="/pages/classify/classify" open-type="switchTab" class="box more">
 			<image class="pic" src="../../common/images/more.jpg" mode="aspectFill"></image>
 			<view class="mask">
 				<uni-icons type="more-filled" size="34" color="#fff"></uni-icons>

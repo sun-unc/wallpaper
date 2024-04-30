@@ -3,11 +3,13 @@
 		{
 			icon: "download-filled",
 			text: "我的下载",
+			href: "/pages/classifyList/classifyList",
 			value: 0
 		},
 		{
 			icon: "star-filled",
 			text: "我的评分",
+			href: "#",
 			value: 0
 		}
 	]
@@ -46,7 +48,7 @@
 	</view>
 	<view class="section">
 		<view class="list">
-			<view class="row" v-for="(item, index) in sectionInfo" :key="index">
+			<navigator :url="item.href" class="row" v-for="(item, index) in sectionInfo" :key="index">
 				<view class="left">
 					<uni-icons :type="item.icon" size="20"></uni-icons>
 					<div class="text">{{item.text}}</div>
@@ -55,7 +57,7 @@
 					<view class="text">{{item.value}}</view>
 					<uni-icons type="right" size="15" color="#aaa"></uni-icons>
 				</view>
-			</view>
+			</navigator>
 		</view>
 	</view>
 	<view class="section">
