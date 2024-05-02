@@ -2,8 +2,15 @@
 import { ref } from 'vue';
 const maskStatus = ref(true)
 const maskChange = () => {
-	console.log(11111);
 	maskStatus.value = !maskStatus.value
+}
+
+const popupRef = ref(null)
+const showInfoPopup = () => {
+	popupRef.value.open()
+}
+const closeInfoPopup = () => {
+	popupRef.value.close()
 }
 </script>
 
@@ -26,7 +33,7 @@ const maskChange = () => {
 			</view>
 			<view class="footer">
 				<view class="box">
-					<uni-icons type="info" size="28"></uni-icons>
+					<uni-icons type="info" size="28" @click.capture="showInfoPopup"></uni-icons>
 					<text class="text">信息</text>
 				</view>
 				
@@ -41,6 +48,63 @@ const maskChange = () => {
 				</view>
 			</view>
 		</view>
+		
+		<uni-popup ref="popupRef" type="bottom">
+			<view class="info-popup">
+				<view class="header">
+					<view></view>
+					<view class="title">壁纸信息</view>
+					<view class="close" @click="closeInfoPopup">
+						<uni-icons type="closeempty" size="18" color="#999"></uni-icons>
+					</view>
+				</view>
+				
+				<scroll-view scroll-y>
+					<view class="content">
+						<view class="row">
+							<view class="label">壁纸ID：</view>
+							<text selectable user-select class="value">内容可选中</text>
+						</view>
+						
+						<view class="row">
+							<view class="label">分类：</view>
+							<text  class="value class">明星美女</text>
+						</view>
+						
+						<view class="row">
+							<view class="label">发布者：</view>
+							<text class="value">蓝胖子</text>
+						</view>
+						
+						<view class="row">
+							<view class="label">评分：</view>
+							<view class="value rate-box">
+								<uni-rate v-model="rate" @change="onRateChange" readonly :touchable="false" :value="3.5" size="16"/>
+								<text class="score">5分</text>
+							</view>
+						</view>
+						
+						<view class="row">
+							<view class="label">摘要：</view>
+							<text selectable user-select class="value">
+								摘要文字内容填充部分；摘要文字内容填充部分；摘要文字内容填充部分；摘要文字内容填充部分；摘要文字内容填充部分；
+							</text>
+						</view>
+						
+						<view class="row">
+							<view class="label">标签：</view>
+							<view class="value tabs">
+								<view class="tab" v-for="item in 3">标签名</view>
+							</view>
+						</view>
+						
+						<view class="copyright">
+								声明：本图片来源于网络，非商业使用，用于免费学习交流，如有侵权，您可以拷贝壁纸ID发送至平台邮箱17355479052@163.com，管理将删除侵权壁纸，维护您的权益。
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -69,6 +133,7 @@ const maskChange = () => {
 			pointer-events: none;
 			&>view {
 				position: absolute;
+				z-index: 10;
 				color: #fff;
 			}
 			.goBack {
@@ -109,6 +174,7 @@ const maskChange = () => {
 				color: $text-font-color-1;
 				box-shadow: 0 2rpx 0 rgba(0, 0, 0, 0.1);
 				backdrop-filter: blur(20rpx);
+				pointer-events: auto;
 				.box {
 					display: flex;
 					flex-direction: column;
@@ -119,6 +185,81 @@ const maskChange = () => {
 					.text {
 						font-size: 26rpx;
 						color: $text-font-color-2;
+					}
+				}
+			}
+		}
+		
+		.info-popup {
+			background-color: #fff;
+			padding: 30rpx;
+			overflow: hidden;
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				.title {
+					color: $text-font-color-2;
+					font-size: 32rpx;
+				}
+				.close {
+		
+					padding: 6rpx;
+				}
+			}
+			scroll-view {
+				max-height: 60vh;
+				.content {
+					.row {
+						display: flex;
+						padding: 16rpx 0;
+						font-size: 32rpx;
+						line-height: 1.7em;
+						.label {
+							color: $text-font-color-2;
+							width: 140rpx;
+							text-align: right;
+							font-size: 30rpx;
+						}
+						.value {
+							flex: 1;
+							width: 0;
+							&.class {
+								color: $brand-theme-color;
+							}
+							&.rate-box {
+								width: 100%;
+								display: flex;
+								align-items: center;
+								.score {
+									font-size: 26rpx;
+									color: $text-font-color-3;
+									padding-left: 20rpx;
+								}
+							}
+							&.tabs {
+								display: flex;
+								flex-wrap: wrap;
+								.tab {
+									border: 1px solid $brand-theme-color;
+									color: $brand-theme-color;
+									font-size: 22rpx;
+									padding: 10rpx 30rpx;
+									border-radius: 40rpx;
+									line-height: 1em;
+									margin: 0 10rpx;
+								}
+							}
+						}
+					}
+					.copyright {
+						font-size: 28rpx;
+						padding: 20rpx;
+						background: #F6F6F6;
+						color: #666;
+						border-radius: 10rpx;
+						margin: 20rpx 0;
+						line-height: 1.6em;
 					}
 				}
 			}
