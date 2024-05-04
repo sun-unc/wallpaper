@@ -12,6 +12,22 @@ const showInfoPopup = () => {
 const closeInfoPopup = () => {
 	popupRef.value.close()
 }
+
+const rate = ref(null)
+
+const userRate = ref(0)
+const changeRate = () => {
+	
+}
+const scorePopupRef = ref(null)
+const openRatePopup = () => {
+	scorePopupRef.value.open()
+}
+const closeRatePopup = () => {
+	scorePopupRef.value.close()
+}
+
+const submitScore = () => {}
 </script>
 
 <template>
@@ -37,7 +53,7 @@ const closeInfoPopup = () => {
 					<text class="text">信息</text>
 				</view>
 				
-				<view class="box">
+				<view class="box" @click="openRatePopup">
 					<uni-icons type="star" size="28"></uni-icons>
 					<text class="text">5分</text>
 				</view>
@@ -49,6 +65,7 @@ const closeInfoPopup = () => {
 			</view>
 		</view>
 		
+		<!-- 壁纸信息 -->
 		<uni-popup ref="popupRef" type="bottom">
 			<view class="info-popup">
 				<view class="header">
@@ -103,6 +120,26 @@ const closeInfoPopup = () => {
 						</view>
 					</view>
 				</scroll-view>
+			</view>
+		</uni-popup>
+		
+		<!-- 评分 -->
+		<uni-popup ref="scorePopupRef" :is-mask-click="false">
+			<view class="score-popup">
+				<view class="header">
+					<view></view>
+					<view class="title">壁纸评分</view>
+					<view class="close" @click="closeRatePopup">
+						<uni-icons type="closeempty" size="18" color="#999"></uni-icons>
+					</view>
+				</view>
+				<view class="content">
+					<uni-rate v-model="userRate" @change="changeRate" allow-half></uni-rate>
+					<text class="text">{{userRate}} 分</text>
+				</view>
+				<view class="footer">
+					<button @click="submitScore" :disabled="!userRate" type="default" size="mini" plain>确认评分</button>
+				</view>
 			</view>
 		</uni-popup>
 	</view>
@@ -190,7 +227,7 @@ const closeInfoPopup = () => {
 			}
 		}
 		
-		.info-popup {
+		.info-popup, .score-popup {
 			background-color: #fff;
 			padding: 30rpx;
 			overflow: hidden;
@@ -203,7 +240,6 @@ const closeInfoPopup = () => {
 					font-size: 32rpx;
 				}
 				.close {
-		
 					padding: 6rpx;
 				}
 			}
@@ -262,6 +298,23 @@ const closeInfoPopup = () => {
 						line-height: 1.6em;
 					}
 				}
+			}
+		}
+		.score-popup {
+			width: 70vw;
+			border-radius: 30rpx;
+			.content {
+				display: flex;
+				justify-content: center;
+				padding: 30rpx 0;
+				.text {
+					color: #ffca3e;
+					line-height: 1.75em;
+				}
+			}
+			.footer {
+				display: flex;
+				justify-content: center;
 			}
 		}
 	}
