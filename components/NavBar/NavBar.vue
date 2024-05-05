@@ -3,7 +3,7 @@
 			<view class="navbar">
 				<view class="status-bar" :style="{height: getStatusBarHeight() + 'px'}"></view>
 				<view class="title-bar">
-					<view class="title" :style="{height: getTitleBarHeight() + 'px', marginLeft: getLeftIcon() + 'px'}">标题</view>
+					<view class="title" :style="{height: getTitleBarHeight() + 'px', marginLeft: getLeftIcon() + 'px'}">{{title}}</view>
 					<view class="search">
 						<uni-icons class="icon" type="search" color="#888" size="18"></uni-icons>
 						<text class="text">搜索</text>
@@ -16,6 +16,12 @@
 
 <script  setup>
 	import {getStatusBarHeight, getTitleBarHeight, getNavBarHeight, getLeftIcon} from '@/utils/system.js'
+	defineProps({
+		title: {
+			type: String,
+			default: "推荐"
+		}
+	})
 </script>
 
 <style lang="scss">

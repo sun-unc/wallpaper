@@ -1,5 +1,9 @@
 <script setup>
-	
+	const goPreview = () => {
+		uni.navigateTo({
+			url: "/pages/preview/preview"
+		})
+	}
 </script>
 
 <template>
@@ -41,7 +45,7 @@
 			</CommonTitle>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" v-for="item in 8">
+					<view class="box" v-for="item in 8" @click="goPreview">
 						<image src="../../common/images/preview_small.webp" mode="aspectFill" webp="true"></image>
 					</view>
 				</scroll-view>

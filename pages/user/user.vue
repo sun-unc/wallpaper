@@ -48,7 +48,7 @@
 	</view>
 	<view class="section">
 		<view class="list">
-			<navigator :url="item.href" class="row" v-for="(item, index) in sectionInfo" :key="index">
+			<navigator class="row" :render-link="false" :url="item.href" v-for="(item, index) in sectionInfo" :key="index">
 				<view class="left">
 					<uni-icons :type="item.icon" size="20"></uni-icons>
 					<div class="text">{{item.text}}</div>

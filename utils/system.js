@@ -1,6 +1,6 @@
 	// 获取刘海高度（状态栏）
 	const SYSTEM_INFO = uni.getSystemInfoSync()
-	export const getStatusBarHeight = () => SYSTEM_INFO.statusBarHeight || 0;
+	export const getStatusBarHeight = () => SYSTEM_INFO.statusBarHeight || 15;
 	
 	export const getTitleBarHeight = () => {
 		// 获取小程序胶囊菜单高度
@@ -24,7 +24,7 @@
 		// #endif
 		
 		// #ifndef MP-TOUTIAO 
-			return 0
+			return 15
 		// #endif
 	}
 	

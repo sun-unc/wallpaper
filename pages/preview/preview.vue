@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import {getStatusBarHeight, getLeftIcon} from '@/utils/system.js'
 const maskStatus = ref(true)
 const maskChange = () => {
 	maskStatus.value = !maskStatus.value
@@ -28,6 +29,10 @@ const closeRatePopup = () => {
 }
 
 const submitScore = () => {}
+
+const goBack = () => {
+	uni.navigateBack()
+}
 </script>
 
 <template>
@@ -39,10 +44,12 @@ const submitScore = () => {}
 		</swiper>
 		
 		<view class="mask" v-show="maskStatus">
-			<view class="goBack"></view>
+			<view @click="goBack" class="goBack" :style="{top: getStatusBarHeight() + 'px', left: getLeftIcon() + 'px'}">
+				<uni-icons type="back" color="#fff" size="20"></uni-icons>
+			</view>
 			<view class="index">3 / 5</view>
 			<view class="time">
-				<uni-dateformat :date="new Date()" format="mm:ss"/>
+				<uni-dateformat :date="new Date()" format="hh:mm"/>
 			</view>
 			<view class="date">
 				<uni-dateformat :date="new Date()" format="MM月dd日"/>
@@ -174,7 +181,19 @@ const submitScore = () => {}
 				color: #fff;
 			}
 			.goBack {
-				
+				width: 38px;
+				height: 38px;
+				background: rgba(0, 0, 0, 0.5);
+				left: 30rpx;
+				margin-left: 0;
+				border-radius: 100px;
+				top: 0;
+				backdrop-filter: blur(10rpx);
+				border: 1rpx solid rgba(255, 255, 255, 0.3);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				pointer-events: auto;
 			}
 			.index {
 				top: 10vh;

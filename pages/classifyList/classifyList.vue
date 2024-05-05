@@ -3,7 +3,7 @@
 <template>
 	<view class="classify-list">
 		<view class="content">
-			<navigator url="" class="item" v-for="item in 10">
+			<navigator url="/pages/preview/preview" class="item" v-for="item in 10">
 				<image src="../../common/images/preview2.jpg" mode="aspectFill"></image>
 			</navigator>
 		</view>
