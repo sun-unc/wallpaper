@@ -1,4 +1,37 @@
 <script setup>
+import { ref } from 'vue';
+	// banner
+	const bannerList = ref([])
+	const getBanner = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/homeBanner",
+			header: {
+				"access-key": "looooo"
+			}
+		})
+		bannerList.value = res.data.data
+	}
+	getBanner()	
+	
+	// 每日推荐
+	const randomWrapperList = ref([])
+	const getRandomWrapper = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/randomWall",
+			header: {
+				"access-key": "looooo"
+			}
+		})
+		randomWrapperList.value = res.data.data
+	}
+	getRandomWrapper()
+	
+	// 公告 
+	const noticeList = ref([
+		"欢迎访问蓝胖子壁纸小程序😍",
+		"如有问题请联系客服😘"
+	])
+	
 	const goPreview = () => {
 		uni.navigateTo({
 			url: "/pages/preview/preview"
@@ -11,8 +44,8 @@
 		<NavBar></NavBar>
 		<view class="banner">
 			<swiper indicator-dots :autoplay="true" circular indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" >
-				<swiper-item v-for="(item, index) in 3" :key="index">
-					<image src="/common/images/banner1.jpg" mode=""></image>
+				<swiper-item v-for="(item, index) in bannerList" :key="item._id">
+					<image :src="item.picurl" mode=""></image>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -23,8 +56,8 @@
 			</view>
 			<view class="center">
 				<swiper vertical circular :autoplay="true" :interval="1500" :duration="300">
-					<swiper-item v-for="item in 3">
-						<view class="swiper-item">测试内容测试内容测试内容测试内容测试内容测试内容测试内容</view>
+					<swiper-item v-for="item in noticeList">
+						<view class="swiper-item">{{item}}</view>
 					</swiper-item>
 				</swiper>
 			</view>
@@ -45,8 +78,8 @@
 			</CommonTitle>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" v-for="item in 8" @click="goPreview">
-						<image src="../../common/images/preview_small.webp" mode="aspectFill" webp="true"></image>
+					<view class="box" v-for="item in randomWrapperList" :key="item._id" @click="goPreview">
+						<image :src="item.smallPicurl" mode="aspectFill"></image>
 					</view>
 				</scroll-view>
 			</view>
