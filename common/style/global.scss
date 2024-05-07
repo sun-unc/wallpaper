@@ -9,6 +9,16 @@ view,swiper,swiper-item  {
 	min-height: 80vh;
 }
 
+/**
+ * 底部安全高度
+*/
 .safe-area-inset-bottom {
 	height: env(safe-area-inset-bottom);
+}
+
+/**
+ * 加载中
+*/
+.loading-layout {
+	padding: 30rpx 0;
 }

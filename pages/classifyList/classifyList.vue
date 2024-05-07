@@ -10,8 +10,10 @@
 		pageSize: 12
 	}
 	const getClassify = async () => {
+		if (noMore.value) return
 		let res = await getClassifyListAPI(requestParams)
 		classifyList.value.push(...res.data)
+		if (res.data.length < requestParams.pageSize) noMore.value = true
 		loading.value = false
 	}
 	
@@ -30,6 +32,7 @@
 		getClassify()
 	})
 	
+	// 骨架屏
 	const loading = ref(true)
 	const skeleton = [{
 		type: 'flex',
@@ -52,6 +55,9 @@
 			gap: '5rpx'
 		}]
 	}]
+	
+	// 底部加载更多
+	const noMore = ref(false)
 </script>
 
 <template>
@@ -61,6 +67,9 @@
 					<navigator url="/pages/preview/preview" class="item" v-for="item in classifyList" :key="item._id">
 						<image :src="item.smallPicurl" mode="aspectFill"></image>
 					</navigator>
+				</view>
+				<view class="loading-layout">
+					<uni-load-more :status="noMore ? 'no-more' : 'loading'"></uni-load-more>
 				</view>
 			</uv-skeletons>
 		</view>
