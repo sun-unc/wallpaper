@@ -12,6 +12,7 @@
 	const getClassify = async () => {
 		let res = await getClassifyListAPI(requestParams)
 		classifyList.value.push(...res.data)
+		loading.value = false
 	}
 	
 	onLoad((option) => {
@@ -28,16 +29,42 @@
 		requestParams.pageSize = 9
 		getClassify()
 	})
+	
+	const loading = ref(true)
+	const skeleton = [{
+		type: 'flex',
+		children: [{
+			type: 'custom',
+			style: 'width:33.3vw;height:33.3vh;',
+			num: 3,
+			gap: '5rpx',
+		},
+		{
+			type: 'custom',
+			style: 'width:33.3vw;height:33.3vh;marginLeft:5rpx;',
+			num: 3,
+			gap: '5rpx'
+		},
+		{
+			type: 'custom',
+			style: 'width:33.3vw;height:33.3vh;marginLeft:5rpx;',
+			num: 3,
+			gap: '5rpx'
+		}]
+	}]
 </script>
 
 <template>
-	<view class="classify-list">
-		<view class="content">
-			<navigator url="/pages/preview/preview" class="item" v-for="item in classifyList" :key="item._id">
-				<image :src="item.smallPicurl" mode="aspectFill"></image>
-			</navigator>
+		<view class="classify-list">
+			<uv-skeletons :loading="loading" :skeleton="skeleton"  :animate="true">
+				<view class="content">	
+					<navigator url="/pages/preview/preview" class="item" v-for="item in classifyList" :key="item._id">
+						<image :src="item.smallPicurl" mode="aspectFill"></image>
+					</navigator>
+				</view>
+			</uv-skeletons>
 		</view>
-	</view>
+
 	<view class="safe-area-inset-bottom"></view>
 </template>
 
