@@ -38,6 +38,7 @@
 			</navigator>
 		</view>
 	</view>
+	<view class="safe-area-inset-bottom"></view>
 </template>
 
 <style scoped lang="scss">
