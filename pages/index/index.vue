@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import {getBannerAPI, getRandomWrapperAPI} from "@/api/api.js"
+import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
 	// banner
 	const bannerList = ref([])
 	const getBanner = async () => {
@@ -17,6 +17,15 @@ import {getBannerAPI, getRandomWrapperAPI} from "@/api/api.js"
 	}
 	getRandomWrapper()
 	
+	// 专题精选
+	const classifyList = ref([])
+	const getClassify = async () => {
+		let res = await getClassifyAPI({
+			select: true
+		})
+		classifyList.value = res.data
+	}
+	getClassify()
 	// 公告 
 	const noticeList = ref([
 		"欢迎访问蓝胖子壁纸小程序😍",
@@ -83,7 +92,7 @@ import {getBannerAPI, getRandomWrapperAPI} from "@/api/api.js"
 			</CommonTitle>
 			
 			<view class="content">
-				<ThemeItem v-for="item in 8"></ThemeItem>
+				<ThemeItem v-for="item in classifyList" :key="item._id" :data="item"></ThemeItem>
 				<ThemeItem :isMore="true"></ThemeItem>
 			</view>
 		</view>

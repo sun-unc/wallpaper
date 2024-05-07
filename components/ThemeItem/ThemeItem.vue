@@ -1,18 +1,28 @@
 <script setup>
+import { computed } from 'vue';
+import { timeSince } from '@/utils/common.js'
 defineProps({
 	isMore: {
 		type: Boolean,
 		default: false
+	},
+	data: {
+		type: Object,
+		default: () => ({
+			name: "默认名称",
+			picurl: "../../common/images/preview1.jpg",
+			updateTime: Date.now() - 1000 * 60 * 60 * 5
+		})
 	}
 })
 </script>
 
 <template>
 	<view class="theme-item">
-		<navigator v-if="!isMore" url="/pages/classifyList/classifyList" class="box">
-			<image class="pic" src="../../common/images/preview1.jpg" mode="aspectFill"></image>
-			<view class="mask">图片标题</view>
-			<view class="tab">3天前更新</view>
+		<navigator v-if="!isMore" :url="`/pages/classifyList/classifyList?id=${data._id}&name=${data.name}`" class="box" >
+			<image class="pic" :src="data.picurl" mode="aspectFill"></image>
+			<view class="mask">{{data.name}}</view>
+			<view class="tab">{{timeSince(data.updateTime)}}前更新</view>
 		</navigator>
 		
 		<navigator v-else url="/pages/classify/classify" open-type="switchTab" class="box more">

@@ -1,4 +1,4 @@
-const baseURL = 'https://tea.qingnian8.com/api'
+const baseURL = 'https://tea.qingnian8.com/api/bizhi'
 
 export function request(url, config = {}) {
 	let {

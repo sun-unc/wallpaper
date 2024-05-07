@@ -1,12 +1,21 @@
 <script setup>
-
+	import { ref } from 'vue';
+	import { getClassifyAPI } from "@/api/api.js"
+	const classifyList = ref([])
+	const getClassify = async () => {
+		let res = await getClassifyAPI({
+			pageSize: 15
+		})
+		classifyList.value = res.data
+	}
+	getClassify()
 </script>
 
 <template>
   <view class="classfy-layout page-bg">
 		<NavBar title="分类"></NavBar>
 		<view class="classfy">
-			<ThemeItem v-for="item in 15"></ThemeItem>
+			<ThemeItem v-for="item in classifyList" :key="item._id" :data="item"></ThemeItem>
 		</view>
   </view>
 </template>
