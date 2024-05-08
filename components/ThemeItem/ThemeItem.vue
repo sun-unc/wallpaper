@@ -19,7 +19,7 @@ defineProps({
 
 <template>
 	<view class="theme-item">
-		<navigator v-if="!isMore" :url="`/pages/classifyList/classifyList?id=${data._id}&name=${data.name}`" class="box" >
+		<navigator v-if="!isMore" :url="`/pages/classifyList/classifyList?id=${data._id}&title=${data.name}`" class="box" >
 			<image class="pic" :src="data.picurl" mode="aspectFill"></image>
 			<view class="mask">{{data.name}}</view>
 			<view class="tab">{{timeSince(data.updateTime)}}前更新</view>

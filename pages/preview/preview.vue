@@ -1,13 +1,20 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import {getStatusBarHeight, getLeftIcon} from '@/utils/system.js'
+import { useClassifyListStore } from '@/store/classifyList.js'
+import { onLoad } from '@dcloudio/uni-app'
+
 const maskStatus = ref(true)
 const maskChange = () => {
 	maskStatus.value = !maskStatus.value
 }
 
 const popupRef = ref(null)
-const showInfoPopup = () => {
+const currentWrapper = reactive({
+	index: 0,
+	info: null
+})
+const showInfoPopup = (item) => {
 	popupRef.value.open()
 }
 const closeInfoPopup = () => {
@@ -33,13 +40,39 @@ const submitScore = () => {}
 const goBack = () => {
 	uni.navigateBack()
 }
+
+const classifyListStore = useClassifyListStore()
+const classifyList = computed(() => {
+	const data = classifyListStore.classifyList.map((item, index) => {
+		item.picurl = item.smallPicurl.replace('_small.webp', '.jpg')
+		if (item._id === optionId) {
+			currentWrapper.index = index
+			currentWrapper.info = item
+		}
+		return item
+	})
+	console.log(currentWrapper);
+	return data
+})
+
+const title = ref('')
+let optionId = ''
+onLoad((option) => {
+	title.value = option.title
+	optionId = option.id
+})
+function swiperChange(ev) {
+	const index = ev.detail.current
+	currentWrapper.index = index
+	currentWrapper.info = classifyList.value[index]
+}
 </script>
 
 <template>
 	<view class="preview">
-		<swiper circular>
-			<swiper-item v-for="item in 5">
-				<image @click="maskChange" src="../../common/images/classify2.jpg" mode="aspectFill"></image>
+		<swiper circular @change="swiperChange" :current="currentWrapper.index">
+			<swiper-item v-for="item in classifyList" :key="item._id">
+				<image @click="maskChange" :src="item.picurl" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 		
@@ -47,7 +80,7 @@ const goBack = () => {
 			<view @click="goBack" class="goBack" :style="{top: getStatusBarHeight() + 'px', left: getLeftIcon() + 'px'}">
 				<uni-icons type="back" color="#fff" size="20"></uni-icons>
 			</view>
-			<view class="index">3 / 5</view>
+			<view class="index">{{`${currentWrapper.index + 1} / ${classifyList.length}`}}</view>
 			<view class="time">
 				<uni-dateformat :date="new Date()" format="hh:mm"/>
 			</view>
@@ -62,7 +95,7 @@ const goBack = () => {
 				
 				<view class="box" @click="openRatePopup">
 					<uni-icons type="star" size="28"></uni-icons>
-					<text class="text">5分</text>
+					<text class="text">{{currentWrapper.info.score}}分</text>
 				</view>
 				
 				<view class="box">
@@ -84,15 +117,15 @@ const goBack = () => {
 				</view>
 				
 				<scroll-view scroll-y>
-					<view class="content">
+					<view class="content" v-if="currentWrapper.info">
 						<view class="row">
 							<view class="label">壁纸ID：</view>
-							<text selectable user-select class="value">内容可选中</text>
+							<text selectable user-select class="value">{{currentWrapper.info._id}}</text>
 						</view>
 						
 						<view class="row">
 							<view class="label">分类：</view>
-							<text  class="value class">明星美女</text>
+							<text  class="value class">{{title}}</text>
 						</view>
 						
 						<view class="row">
@@ -103,22 +136,22 @@ const goBack = () => {
 						<view class="row">
 							<view class="label">评分：</view>
 							<view class="value rate-box">
-								<uni-rate v-model="rate" @change="onRateChange" readonly :touchable="false" :value="3.5" size="16"/>
-								<text class="score">5分</text>
+								<uni-rate v-model="rate" @change="onRateChange" readonly :touchable="false" :value="currentWrapper.info.score" size="16"/>
+								<text class="score">{{currentWrapper.info.score}}分</text>
 							</view>
 						</view>
 						
 						<view class="row">
 							<view class="label">摘要：</view>
 							<text selectable user-select class="value">
-								摘要文字内容填充部分；摘要文字内容填充部分；摘要文字内容填充部分；摘要文字内容填充部分；摘要文字内容填充部分；
+								{{currentWrapper.info.description}}
 							</text>
 						</view>
 						
 						<view class="row">
 							<view class="label">标签：</view>
 							<view class="value tabs">
-								<view class="tab" v-for="item in 3">标签名</view>
+								<view class="tab" v-for="(tab, index) in currentWrapper.info.tabs" :key="index">{{tab}}</view>
 							</view>
 						</view>
 						

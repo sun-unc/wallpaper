@@ -1,7 +1,7 @@
 <script setup>
 	import { onLoad, onReachBottom } from '@dcloudio/uni-app';
 	import { useClassifyListStore } from '@/store/classifyList.js'
-	import { computed } from 'vue';
+	import { computed, ref } from 'vue';
 	import { storeToRefs } from "pinia"
 
 	const classifyListStore = useClassifyListStore()
@@ -13,18 +13,18 @@
 		pageSize: 12
 	};
 	
+	const title = ref('')
 	onLoad((option) => {
-		const { id, name } = option
-		requestParams.classid = id
+		requestParams.classid = option.id
+		title.value = option.title
 		getClassify(requestParams)
 		uni.setNavigationBarTitle({
-			title: name
+			title: title.value
 		})
 	})
 	
 	onReachBottom(() => {
 		loadMore(requestParams)
-		console.log(classifyList);
 	})
 	
 	/**
@@ -61,7 +61,7 @@
 		<view class="classify-list">
 			<uv-skeletons :loading="loading" :skeleton="skeleton"  :animate="true">
 				<view class="content">	
-					<navigator url="/pages/preview/preview" class="item" v-for="item in classifyList" :key="item._id">
+					<navigator :url="`/pages/preview/preview?title=${title}&id=${item._id}`" class="item" v-for="item in classifyList" :key="item._id">
 						<image :src="item.smallPicurl" mode="aspectFill"></image>
 					</navigator>
 				</view>
