@@ -1,39 +1,37 @@
 <script setup>
-	import { ref } from 'vue';
-	import { getClassifyListAPI } from "@/api/api.js";
-	import { onLoad, onReachBottom } from '@dcloudio/uni-app'
+	import { onLoad, onReachBottom } from '@dcloudio/uni-app';
+	import { useClassifyListStore } from '@/store/classifyList.js'
+	import { computed } from 'vue';
+	import { storeToRefs } from "pinia"
+
+	const classifyListStore = useClassifyListStore()
+	const { getClassify, loadMore, classifyList } = classifyListStore
 	
-	const classifyList = ref([])
 	const requestParams = {
 		classid: '',
 		pageNum: 1,
 		pageSize: 12
-	}
-	const getClassify = async () => {
-		if (noMore.value) return
-		let res = await getClassifyListAPI(requestParams)
-		classifyList.value.push(...res.data)
-		if (res.data.length < requestParams.pageSize) noMore.value = true
-		loading.value = false
-	}
+	};
 	
 	onLoad((option) => {
 		const { id, name } = option
 		requestParams.classid = id
-		getClassify()
+		getClassify(requestParams)
 		uni.setNavigationBarTitle({
 			title: name
 		})
 	})
 	
 	onReachBottom(() => {
-		requestParams.pageNum++
-		requestParams.pageSize = 9
-		getClassify()
+		loadMore(requestParams)
+		console.log(classifyList);
 	})
 	
-	// 骨架屏
-	const loading = ref(true)
+	/**
+	 * ref 定义的属性解构时会丢失响应式,所以通过computed来获取
+	 * 而reactive定义的变量结构时不会丢失响应式
+	*/ 
+	const loading = computed(() => classifyListStore.loading)
 	const skeleton = [{
 		type: 'flex',
 		children: [{
@@ -55,9 +53,8 @@
 			gap: '5rpx'
 		}]
 	}]
-	
-	// 底部加载更多
-	const noMore = ref(false)
+
+	const isNoMore = computed(() => classifyListStore.isNoMore)
 </script>
 
 <template>
@@ -69,7 +66,7 @@
 					</navigator>
 				</view>
 				<view class="loading-layout">
-					<uni-load-more :status="noMore ? 'no-more' : 'loading'"></uni-load-more>
+					<uni-load-more :status="isNoMore ? 'no-more' : 'loading'"></uni-load-more>
 				</view>
 			</uv-skeletons>
 		</view>
