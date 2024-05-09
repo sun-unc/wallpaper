@@ -42,8 +42,9 @@ const goBack = () => {
 }
 
 const classifyListStore = useClassifyListStore()
-const classifyList = computed(() => {
-	const data = classifyListStore.classifyList.map((item, index) => {
+const classifyList = ref([])
+const getClassifyList = () => {
+	return classifyListStore.classifyList.map((item, index) => {
 		item.picurl = item.smallPicurl.replace('_small.webp', '.jpg')
 		if (item._id === optionId) {
 			currentWrapper.index = index
@@ -51,15 +52,14 @@ const classifyList = computed(() => {
 		}
 		return item
 	})
-	console.log(currentWrapper);
-	return data
-})
+}
 
 const title = ref('')
 let optionId = ''
 onLoad((option) => {
 	title.value = option.title
 	optionId = option.id
+	classifyList.value = getClassifyList()
 })
 function swiperChange(ev) {
 	const index = ev.detail.current
@@ -76,7 +76,7 @@ function swiperChange(ev) {
 			</swiper-item>
 		</swiper>
 		
-		<view class="mask" v-show="maskStatus">
+		<view class="mask" v-show="maskStatus" v-if="currentWrapper.info">
 			<view @click="goBack" class="goBack" :style="{top: getStatusBarHeight() + 'px', left: getLeftIcon() + 'px'}">
 				<uni-icons type="back" color="#fff" size="20"></uni-icons>
 			</view>
@@ -136,7 +136,7 @@ function swiperChange(ev) {
 						<view class="row">
 							<view class="label">评分：</view>
 							<view class="value rate-box">
-								<uni-rate v-model="rate" @change="onRateChange" readonly :touchable="false" :value="currentWrapper.info.score" size="16"/>
+								<uni-rate v-model="rate" readonly :touchable="false" :value="currentWrapper.info.score" size="16"/>
 								<text class="score">{{currentWrapper.info.score}}分</text>
 							</view>
 						</view>
