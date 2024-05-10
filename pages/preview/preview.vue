@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import {getStatusBarHeight, getLeftIcon} from '@/utils/system.js'
 import { useClassifyListStore } from '@/store/classifyList.js'
 import { onLoad } from '@dcloudio/uni-app'
@@ -49,6 +49,7 @@ const getClassifyList = () => {
 		if (item._id === optionId) {
 			currentWrapper.index = index
 			currentWrapper.info = item
+			loadedSwiperIndexList.value.push(index)
 		}
 		return item
 	})
@@ -61,18 +62,31 @@ onLoad((option) => {
 	optionId = option.id
 	classifyList.value = getClassifyList()
 })
+
+// 优化图片加载，防止一次加载全部图片
+let loadedSwiperIndexList = ref([])
 function swiperChange(ev) {
 	const index = ev.detail.current
 	currentWrapper.index = index
 	currentWrapper.info = classifyList.value[index]
 }
+
+watch(
+	() => currentWrapper.index,
+	(index, old) => {
+		// 计算与index相邻的图片下标
+		let left = index === 0 ? classifyList.value.length - 1 : index - 1
+		let right = index === classifyList.value.length ? 0 : index + 1
+		loadedSwiperIndexList.value.push(left, index, right)
+		loadedSwiperIndexList.value = [...new Set(loadedSwiperIndexList.value)]
+	})
 </script>
 
 <template>
 	<view class="preview">
 		<swiper circular @change="swiperChange" :current="currentWrapper.index">
-			<swiper-item v-for="item in classifyList" :key="item._id">
-				<image @click="maskChange" :src="item.picurl" mode="aspectFill"></image>
+			<swiper-item v-for="(item, index) in classifyList" :key="item._id">
+				<image v-if="loadedSwiperIndexList.includes(index)" @click="maskChange" :src="item.picurl" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 		
