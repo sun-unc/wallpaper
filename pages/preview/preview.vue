@@ -14,7 +14,7 @@ const currentWrapper = reactive({
 	index: 0,
 	info: null
 })
-const showInfoPopup = (item) => {
+const showInfoPopup = () => {
 	popupRef.value.open()
 }
 const closeInfoPopup = () => {
@@ -84,13 +84,13 @@ watch(
 
 <template>
 	<view class="preview">
-		<swiper circular @change="swiperChange" :current="currentWrapper.index">
-			<swiper-item v-for="(item, index) in classifyList" :key="item._id">
-				<image v-if="loadedSwiperIndexList.includes(index)" @click="maskChange" :src="item.picurl" mode="aspectFill"></image>
+		<swiper circular @change="swiperChange" :current="currentWrapper.index" @click="maskChange">
+			<swiper-item v-for="(item, index) in classifyList" :key="index">
+				<image v-if="loadedSwiperIndexList.includes(index)" :src="item.picurl" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 		
-		<view class="mask" v-show="maskStatus" v-if="currentWrapper.info">
+		<view class="mask" :style="{display: maskStatus ? 'visiable' : 'none'}"  v-if="currentWrapper.info">
 			<view @click="goBack" class="goBack" :style="{top: getStatusBarHeight() + 'px', left: getLeftIcon() + 'px'}">
 				<uni-icons type="back" color="#fff" size="20"></uni-icons>
 			</view>
@@ -102,8 +102,8 @@ watch(
 				<uni-dateformat :date="new Date()" format="MM月dd日"/>
 			</view>
 			<view class="footer">
-				<view class="box">
-					<uni-icons type="info" size="28" @click.capture="showInfoPopup"></uni-icons>
+				<view class="box" @click="showInfoPopup">
+					<uni-icons type="info" size="28"></uni-icons>
 					<text class="text">信息</text>
 				</view>
 				
@@ -348,7 +348,7 @@ watch(
 									font-size: 22rpx;
 									padding: 10rpx 30rpx;
 									border-radius: 40rpx;
-									line-height: 1em;
+									line-height: 1.5em;
 									margin: 0 10rpx;
 								}
 							}
