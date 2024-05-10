@@ -120,7 +120,7 @@ watch(
 		</view>
 		
 		<!-- 壁纸信息 -->
-		<uni-popup ref="popupRef" type="bottom">
+		<uni-popup ref="popupRef" type="bottom" :safe-area="false">
 			<view class="info-popup">
 				<view class="header">
 					<view></view>
