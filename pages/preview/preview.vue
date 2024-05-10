@@ -3,6 +3,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import {getStatusBarHeight, getLeftIcon} from '@/utils/system.js'
 import { useClassifyListStore } from '@/store/classifyList.js'
 import { onLoad } from '@dcloudio/uni-app'
+import { getSetupScoreAPI } from "@/api/api.js"
 
 const maskStatus = ref(true)
 const maskChange = () => {
@@ -21,9 +22,8 @@ const closeInfoPopup = () => {
 	popupRef.value.close()
 }
 
-const rate = ref(null)
-
 const userRate = ref(0)
+const isRated = computed(() => currentWrapper.info.hasOwnProperty('userScore'))
 const changeRate = () => {
 	
 }
@@ -35,7 +35,33 @@ const closeRatePopup = () => {
 	scorePopupRef.value.close()
 }
 
-const submitScore = () => {}
+const submitScore = async () => {
+	uni.showLoading({
+		title: '加载中...'
+	})
+	let { classid, _id: wallId} = currentWrapper.info
+	try {
+		const res = await getSetupScoreAPI({
+			classid,
+			wallId,
+			userScore: userRate.value
+		})
+		// 这里不需要判断errCode了，因为await相当于.then,只有resolve会进入这里
+		// 而该api是在request.js里面判断errCode后resolve/reject的
+		// if (res.errCode === 0) {
+			uni.showToast({
+				title: "评分成功",
+				icon: "none"
+			})
+			closeRatePopup()
+		// }
+		// 展示评分过的壁纸评分
+		classifyList.value[currentWrapper.index].userScore = userRate.value
+	} catch(err) {
+		console.log(err);
+	}
+	uni.hideLoading()
+}
 
 const goBack = () => {
 	uni.navigateBack()
@@ -74,6 +100,7 @@ function swiperChange(ev) {
 watch(
 	() => currentWrapper.index,
 	(index, old) => {
+		userRate.value = currentWrapper.info.userScore || 0
 		// 计算与index相邻的图片下标
 		let left = index === 0 ? classifyList.value.length - 1 : index - 1
 		let right = index === classifyList.value.length ? 0 : index + 1
@@ -150,7 +177,7 @@ watch(
 						<view class="row">
 							<view class="label">评分：</view>
 							<view class="value rate-box">
-								<uni-rate v-model="rate" readonly :touchable="false" :value="currentWrapper.info.score" size="16"/>
+								<uni-rate readonly :touchable="false" :value="currentWrapper.info.score" size="16"/>
 								<text class="score">{{currentWrapper.info.score}}分</text>
 							</view>
 						</view>
@@ -182,17 +209,17 @@ watch(
 			<view class="score-popup">
 				<view class="header">
 					<view></view>
-					<view class="title">壁纸评分</view>
+					<view class="title">{{isRated ? '已经评分过啦～' : '壁纸评分'}}</view>
 					<view class="close" @click="closeRatePopup">
 						<uni-icons type="closeempty" size="18" color="#999"></uni-icons>
 					</view>
 				</view>
 				<view class="content">
-					<uni-rate v-model="userRate" @change="changeRate" allow-half></uni-rate>
+					<uni-rate v-model="userRate" :disabled="isRated" disabled-color="#FFCA3E" allow-half></uni-rate>
 					<text class="text">{{userRate}} 分</text>
 				</view>
 				<view class="footer">
-					<button @click="submitScore" :disabled="!userRate" type="default" size="mini" plain>确认评分</button>
+					<button @click="submitScore" :disabled="isRated" type="default" size="mini" plain>确认评分</button>
 				</view>
 			</view>
 		</uni-popup>
@@ -376,6 +403,8 @@ watch(
 				.text {
 					color: #ffca3e;
 					line-height: 1.75em;
+					width: 3.5em;
+					text-align: center;
 				}
 			}
 			.footer {
