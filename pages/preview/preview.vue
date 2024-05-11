@@ -23,7 +23,7 @@ const closeInfoPopup = () => {
 }
 
 const userRate = ref(0)
-const isRated = computed(() => currentWrapper.info.hasOwnProperty('userScore'))
+const isRated = computed(() => currentWrapper.info?.hasOwnProperty('userScore'))
 const changeRate = () => {
 	
 }
@@ -107,6 +107,50 @@ watch(
 		loadedSwiperIndexList.value.push(left, index, right)
 		loadedSwiperIndexList.value = [...new Set(loadedSwiperIndexList.value)]
 	})
+	
+const download = async () => {
+	const {_id: id, picurl} = currentWrapper.info
+	// #ifdef H5
+	try {
+		const response = await fetch(picurl)
+		const blob = await response.blob()
+		console.log(blob);
+		const url = window.URL.createObjectURL(blob)
+		const a = document.createElement('a')
+		a.href = url
+		a.download = `${id}.jpg`
+		a.click()
+		window.URL.revokeObjectURL(url);
+	} catch(err) {
+		console.log(err);
+		uni.showToast({ title: '下载失败', icon: 'error' });
+	}
+	// #endif
+	
+	// #ifndef H5
+	// 拿到网络图片本地路径
+	try {
+		const path = await new Promise(resolve => {
+			uni.getImageInfo({
+				src: picurl,
+				success: (info) => {
+					resolve(info.path)
+				}
+			}) 
+		})
+		console.log(path);
+		uni.saveImageToPhotosAlbum({
+			filePath: path,
+			success: function () {
+				uni.showToast({ title: '下载成功', icon: 'success' });
+			}
+		})
+	} catch(err) {
+		console.log(err);
+		uni.showToast({ title: '下载失败', icon: 'error' });
+	}
+	// #endif
+}
 </script>
 
 <template>
@@ -117,7 +161,7 @@ watch(
 			</swiper-item>
 		</swiper>
 		
-		<view class="mask" :style="{display: maskStatus ? 'visiable' : 'none'}"  v-if="currentWrapper.info">
+		<view class="mask" :style="{display: maskStatus ? 'flex' : 'none'}"  v-if="currentWrapper.info">
 			<view @click="goBack" class="goBack" :style="{top: getStatusBarHeight() + 'px', left: getLeftIcon() + 'px'}">
 				<uni-icons type="back" color="#fff" size="20"></uni-icons>
 			</view>
@@ -139,7 +183,7 @@ watch(
 					<text class="text">{{currentWrapper.info.score}}分</text>
 				</view>
 				
-				<view class="box">
+				<view class="box" @click="download">
 					<uni-icons type="download" size="28"></uni-icons>
 					<text class="text">下载</text>
 				</view>
