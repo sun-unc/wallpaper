@@ -110,11 +110,14 @@ watch(
 	
 const download = async () => {
 	const {_id: id, picurl} = currentWrapper.info
+	uni.showLoading({
+		title: '下载中...',
+		mask: true
+	})
 	// #ifdef H5
 	try {
 		const response = await fetch(picurl)
 		const blob = await response.blob()
-		console.log(blob);
 		const url = window.URL.createObjectURL(blob)
 		const a = document.createElement('a')
 		a.href = url
@@ -124,30 +127,78 @@ const download = async () => {
 	} catch(err) {
 		console.log(err);
 		uni.showToast({ title: '下载失败', icon: 'error' });
+	} finally {
+		uni.hideLoading()
 	}
 	// #endif
 	
 	// #ifndef H5
 	// 拿到网络图片本地路径
 	try {
-		const path = await new Promise(resolve => {
+		const path = await new Promise((resolve, reject) => {
+			// 获取图片下载路径（由微信提供）
 			uni.getImageInfo({
 				src: picurl,
 				success: (info) => {
 					resolve(info.path)
+				},
+				fail: err => {
+					reject({
+						code: 1,
+						message: err
+					})
 				}
-			}) 
+ 			}) 
 		})
-		console.log(path);
-		uni.saveImageToPhotosAlbum({
-			filePath: path,
-			success: function () {
-				uni.showToast({ title: '下载成功', icon: 'success' });
-			}
-		})
+		await new Promise((resolve, reject) => {
+			uni.saveImageToPhotosAlbum({
+				filePath: path,
+				success: function () {
+					uni.showToast({ title: '下载成功', icon: 'success' });
+					resolve()
+				},
+				fail: err => {
+					reject({
+						code: 2,
+						message: err
+					})
+				}
+			})
+		} )
 	} catch(err) {
-		console.log(err);
-		uni.showToast({ title: '下载失败', icon: 'error' });
+		if (err.code === 2) {
+			if (err.message.errMsg === "saveImageToPhotosAlbum:fail cancel") {
+				return uni.showToast({ title: '取消下载', icon: 'error' });
+			}
+			// 没有小程序保存相册权限
+			await new Promise((resolve, reject) => {
+				uni.showModal({
+					title: "提示",
+					content: "请允许保存相册权限",
+					success: res => {
+						if (res.confirm) {
+							resolve()
+						} else {
+							uni.showToast({ title: '获取授权失败', icon: 'error' });
+						}
+					}
+				})
+			})
+			uni.openSetting({
+				success(res) {
+					if (res.authSetting['scope.writePhotosAlbum']) {
+						uni.showToast({ title: '获取授权成功', icon: 'success' });
+					} else {
+						uni.showToast({ title: '获取授权失败', icon: 'error' });
+					}
+				}
+			})
+		} else {
+			uni.showToast({ title: '下载失败', icon: 'error' });
+			console.log("壁纸下载失败：", err)
+		}
+	} finally {
+		uni.hideLoading()
 	}
 	// #endif
 }
