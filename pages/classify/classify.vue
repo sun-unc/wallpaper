@@ -1,6 +1,8 @@
 <script setup>
 	import { ref } from 'vue';
 	import { getClassifyAPI } from "@/api/api.js"
+	import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
+	
 	const classifyList = ref([])
 	const getClassify = async () => {
 		let res = await getClassifyAPI({
@@ -9,6 +11,20 @@
 		classifyList.value = res.data
 	}
 	getClassify()
+	
+	// 分享好友功能
+	onShareAppMessage(() => {
+		return {
+			title: "蓝胖子壁纸——分类",
+			path: "/pages/classify/classify"
+		}
+	})
+	// 分享朋友圈 该功能为Beta版 目前仅支持安卓
+	onShareTimeline(() => {
+		return {
+			title: "蓝胖子壁纸"
+		}
+	}) 	
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 	// banner
 	const bannerList = ref([])
 	const getBanner = async () => {
@@ -37,6 +38,20 @@ import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
 			url: "/pages/preview/preview"
 		})
 	}
+	
+	// 分享好友功能
+	onShareAppMessage(() => {
+		return {
+			title: "蓝胖子壁纸",
+			path: "/pages/index/index"
+		}
+	})
+	// 分享朋友圈 该功能为Beta版 目前仅支持安卓
+	onShareTimeline(() => {
+		return {
+			title: "蓝胖子壁纸"
+		}
+	}) 
 </script>
 
 <template>
