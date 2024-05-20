@@ -49,7 +49,8 @@ import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 	// 分享朋友圈 该功能为Beta版 目前仅支持安卓
 	onShareTimeline(() => {
 		return {
-			title: "蓝胖子壁纸"
+			title: "蓝胖子壁纸",
+			path: "/pages/index/index"
 		}
 	}) 
 </script>

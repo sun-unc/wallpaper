@@ -3,7 +3,7 @@
 	import { useClassifyListStore } from '@/store/classifyList.js'
 	import { computed, ref } from 'vue';
 	import { storeToRefs } from "pinia"
-
+	import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 	const classifyListStore = useClassifyListStore()
 	const { getClassify, loadMore, classifyList } = classifyListStore
 	
@@ -55,6 +55,21 @@
 	}]
 
 	const isNoMore = computed(() => classifyListStore.isNoMore)
+	
+	// 分享好友功能
+	onShareAppMessage(() => {
+		return {
+			title: `蓝胖子壁纸——${title.value}`,
+			path: `pages/classifyList/classifyList?id=${requestParams.classid}&name=${title.value}`
+		}
+	})
+	// 分享朋友圈 该功能为Beta版 目前仅支持安卓
+	onShareTimeline(() => {
+		return {
+			title: `蓝胖子壁纸——${title.value}`,
+			query: `id=${requestParams.classid}&name=${title.value}`
+		}
+	}) 
 </script>
 
 <template>

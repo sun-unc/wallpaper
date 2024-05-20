@@ -22,7 +22,8 @@
 	// 分享朋友圈 该功能为Beta版 目前仅支持安卓
 	onShareTimeline(() => {
 		return {
-			title: "蓝胖子壁纸"
+			title: "蓝胖子壁纸",
+			path: "/pages/classify/classify"
 		}
 	}) 	
 </script>
