@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
+import { useClassifyListStore } from '../../store/classifyList';
 	// banner
 	const bannerList = ref([])
 	const getBanner = async () => {
@@ -9,11 +10,13 @@ import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
 	}
 	getBanner()	
 	
+	const classifyStore = useClassifyListStore()
 	// 每日推荐
 	const randomWrapperList = ref([])
 	const getRandomWrapper = async () => {
 		let res = await getRandomWrapperAPI()
 		randomWrapperList.value = res.data
+		classifyStore.setClassifyList(randomWrapperList.value)
 	}
 	getRandomWrapper()
 	
@@ -32,9 +35,9 @@ import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
 		"如有问题请联系客服😘"
 	])
 	
-	const goPreview = () => {
+	const goPreview = (item) => {
 		uni.navigateTo({
-			url: "/pages/preview/preview"
+			url: `/pages/preview/preview?id=${item._id}&title=${'每日推荐'}`
 		})
 	}
 </script>
@@ -78,7 +81,7 @@ import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
 			</CommonTitle>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" v-for="item in randomWrapperList" :key="item._id" @click="goPreview">
+					<view class="box" v-for="item in randomWrapperList" :key="item._id" @click="goPreview(item)">
 						<image :src="item.smallPicurl" mode="aspectFill"></image>
 					</view>
 				</scroll-view>
@@ -92,7 +95,7 @@ import { getBannerAPI, getRandomWrapperAPI, getClassifyAPI } from "@/api/api.js"
 			</CommonTitle>
 			
 			<view class="content">
-				<ThemeItem v-for="item in classifyList" :key="item._id" :data="item"></ThemeItem>
+				<ThemeItem @click="classifyStore.setClassifyList([])" v-for="item in classifyList" :key="item._id" :data="item"></ThemeItem>
 				<ThemeItem :isMore="true"></ThemeItem>
 			</view>
 		</view>

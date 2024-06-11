@@ -22,11 +22,18 @@ export const useClassifyListStore = defineStore('classifyList', () => {
 		requestParams.pageSize = 9
 		getClassify(requestParams)
 	}
+	
+	const setClassifyList = (data) => {
+		classifyList.length = 0
+		classifyList.push(...data)
+	}
+	
 	return {
 		getClassify,
 		loadMore,
 		classifyList,
 		isNoMore,
-		loading
+		loading,
+		setClassifyList
 	}
 })
